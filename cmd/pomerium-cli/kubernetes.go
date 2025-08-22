@@ -109,9 +109,10 @@ func parseToken(rawjwt string) (*ExecCredential, error) {
 		return nil, err
 	}
 
-	var expiresAt time.Time
+	var expiresAt *time.Time
 	if claims.Expiry != 0 {
-		expiresAt = time.Unix(claims.Expiry, 0)
+		expiresAtT := time.Unix(claims.Expiry, 0)
+		expiresAt = &expiresAtT
 	}
 
 	return &ExecCredential{
@@ -175,7 +176,7 @@ type ExecCredential struct {
 type ExecCredentialStatus struct {
 	// ExpirationTimestamp indicates a time when the provided credentials expire.
 	// +optional
-	ExpirationTimestamp time.Time `json:"expirationTimestamp,omitempty"`
+	ExpirationTimestamp *time.Time `json:"expirationTimestamp,omitempty"`
 	// Token is a bearer token used by the client for request authentication.
 	Token string `json:"token,omitempty"`
 	// PEM-encoded client TLS certificates (including intermediates, if any).
